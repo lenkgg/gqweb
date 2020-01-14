@@ -1,0 +1,56 @@
+/*
+enum MARCKET{
+    M_UNKNOWN     = 0;
+    M_STOCK_CN    = 1;       //include sh & sz
+    M_STOCK_HK    = 2;
+    M_STOCK_US    = 3;
+    ////////////future///////////
+    M_FUTURE_CN_SH   = 1000;
+    M_FUTURE_US_CMX  = 1100;
+    M_FUTURE_SGP     = 1400;
+    /////////sub marcket///////////
+    M_STOCK_CN_SH = 10000;
+    M_STOCK_CN_SZ = 10001;
+}
+
+enum SCOPE{
+    SCP_STK_HS300     = 0;
+    SCP_STK_SZ50      = 1;
+    SCP_STK_CN_ALL    = 2;
+}
+enum KLINE_TYPE{
+    KL_DAY          = 0;
+    KL_WEEK         = 2;
+    KL_MONTH        = 3;
+    KL_YEAR         = 4;
+    KL_5M           = 5;
+    KL_15M          = 6;
+    KL_30M          = 7;
+    KL_HOUR         = 8;
+    KL_2HOUR        = 9;
+    KL_CUSTOM       = 99;
+}
+message F_OBJECT{
+    string code     = 1;
+    MARCKET mkt     = 2;
+    MARCKET sub_mkt     = 3;
+    string name        = 4;
+    string  industry    = 5;
+    uint64 expire       = 6;   //future 交割日
+    string desc        = 7;
+}
+message KL_BAR{
+    uint64 datetime     = 1;
+    float open          = 2;
+    float high          = 3;
+    float low           = 4;
+    float close         = 5;
+    uint32 volume         = 6;
+    float change        = 7;
+}
+
+message KLINE{
+    string code             = 1;
+    KLINE_TYPE type         = 2;
+    repeated KL_BAR bars    = 3;
+}*/

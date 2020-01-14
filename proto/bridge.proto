@@ -1,0 +1,41 @@
+syntax = "proto3";
+package proto;
+
+service bridge{
+  rpc BrgHedge(BrgHedgeRequest) returns (BrgHedgeResponse){}
+  rpc BrgPredict(BrgPredictRequest) returns (BrgPredictResponse){}
+  rpc TransFile(TransFileRequest) returns (TransFileResponse){}
+}
+
+message BrgPredictRequest{
+    string symbol       =1;
+    string ktype        =2;
+}
+
+message BrgPredictResponse{
+    string symbol       =1;
+    string ktype        =2;
+    string js_res 	    =3;
+}
+
+message BrgHedgeRequest{
+    string bsymbol      =1;
+    string scope        =2;
+    string ktype        =3;
+}
+
+message BrgHedgeResponse{
+    string bsymbol      =1;
+    string scope        =2;
+    string ktype        =3;
+    string js_res 	    =4;
+}
+
+message TransFileRequest{
+    string name         =2;
+    bytes context       =3;
+}
+
+message TransFileResponse{
+    string msg         =1;
+}

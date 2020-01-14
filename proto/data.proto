@@ -1,0 +1,66 @@
+syntax = "proto3";
+package proto;
+
+service Data{
+  rpc FetchData(FetchDataRequest) returns (FetchDataReponse){}
+  rpc LoadData(LoadDataRequest) returns (LoadDataReponse){}
+  rpc TimerTask(TimerTaskRequest) returns (TimerTaskResponse){}
+  rpc GetSymbolOhlc(GetSymbolOhlcRequest) returns (GetSymbolOhlcResponse){}
+  rpc PredictSymbol(stream PredictSymbolRequest) returns(stream PredictSymbolResponse){}
+
+}
+
+
+///请求更新网络数据
+message FetchDataRequest{
+    repeated string symbols         = 2;
+    string start                    =3;
+    string end                      =4;
+}
+
+message FetchDataReponse{
+    int32 code                      =2;   ///0：成功响应更新
+}
+
+message LoadDataRequest{
+    string symbol                   =2;
+    string start                    =3;
+    string end                      =4;
+    string bar_type                =5;   ////"DAY":day line(default), "HOR": hour line
+}
+
+message LoadDataReponse{
+    string symbol                   =2;
+    bytes jsDF                      =3;   ///[]DFitem数据块
+}
+
+message PredictSymbolRequest{
+    string symbol                   =2;
+}
+
+message PredictSymbolResponse{
+    string symbol                   =2;
+    repeated string last_ohlc       =3;   ///["2019-08-31 00:00:00,10.01,10,08,10.00,10.02"]
+    string predict_ohlc             =4;   ////"2019-09-01 00:00:00,10.01,10,08,10.00,10.02"
+    string ptime                    =5;    ///"2019-08-31 10:10:00"
+}
+
+message TimerTaskRequest{
+    int32 taskid                    =2;
+    string ext                      =3;
+}
+
+message TimerTaskResponse{
+    int32 code                      =2;
+    string msg                      =3;
+}
+
+message GetSymbolOhlcRequest{
+    string symbol                   =2;
+    string date                     =3;
+}
+
+message GetSymbolOhlcResponse{
+    string symbol                   =2;
+    string ohlc                     =3;   ////"2019-09-01 00:00:00,10.01,10,08,10.00,10.02"
+}

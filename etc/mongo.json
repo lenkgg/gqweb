@@ -1,0 +1,17 @@
+{
+  "Account":{
+    "uri": "mongodb://localhost:27017"
+  },
+  "Market":{
+    "uri": "mongodb://localhost:27017"
+  },
+  "AutoInc":{
+    "uri": "mongodb://localhost:27017"
+  },
+  "Sns":{
+    "uri": "mongodb://localhost:27017"
+  },
+  "Data":{
+    "uri": "mongodb://127.0.0.1:27017"
+  }
+}

@@ -1,0 +1,100 @@
+syntax = "proto3";
+package proto;
+
+service Account{
+  rpc Regist(RegistRequest) returns (RegistResponse){}
+  rpc Login(LoginRequest) returns (LoginResponse){}
+  rpc BindPhone(BindPhoneRequest) returns (BindPhoneReponse){}
+  rpc UpdateInfo(UpdateInfoRequest) returns (UpdateInfoResponse){}
+  rpc OrgRegist(OrgRegistRequest) returns (OrgRegistResponse){}
+  rpc OrgLogin(OrgLoginRequest) returns (OrgLoginResponse){}
+}
+/////////////////////////////for org/////////////////
+message OrgRegistRequest{
+    oneof id{
+    string phone = 2;
+    string email = 3;
+    };
+    oneof verify{
+    string pswd = 4;         //empty for wechat
+    string verify_code = 5;
+    };
+    bytes org_info = 6;
+}
+message OrgRegistResponse {
+    uint64 oid          = 2;
+    bytes org_info     = 6;
+}
+
+message OrgLoginRequest {
+    oneof id{
+    string phone        = 2;
+    string email        = 3;
+    uint64 oid          = 4;
+    };
+    oneof verify{
+    string pswd         = 7;
+    string verify_code  = 8;
+    }
+}
+message OrgLoginResponse{
+    uint64 oid          = 2;
+    bytes org_info     = 3;
+}
+
+/////////////////////////////for user//////////////
+message RegistRequest{
+    oneof id{
+    string wxcode = 1;     //for wechat
+    string phone = 2;
+    string email = 3;
+    };
+    oneof verify{
+    string pswd = 4;         //empty for wechat
+    string verify_code = 5;
+    };
+    uint64 channel = 6;      ///来源渠道号
+    bytes user_info = 7;
+}
+message RegistResponse {
+    uint64 uid          = 2;
+    bytes user_info     = 6;
+    bytes slots         = 7;
+}
+message LoginRequest {
+    oneof id{
+    string wxcode       = 1;
+    string phone        = 2;
+    string email        = 3;
+    uint64 uid          = 4;
+    };
+    oneof verify{
+    string pswd         = 7;       //empty for wechat
+    string verify_code  = 8;
+    }
+    uint64 channel = 9;
+}
+message LoginResponse{
+    uint64 uid          = 2;
+    bytes user_info     = 3;
+    bytes slots         = 7;
+}
+message BindPhoneRequest {
+    uint64 uid          = 1;
+    string phone        = 2;
+    string verify       = 3;
+}
+
+message BindPhoneReponse{
+    string phone        =2;
+}
+
+message UpdateInfoRequest{
+    uint64 uid          = 2;
+    bytes user_info     = 3;
+}
+
+message UpdateInfoResponse{
+    uint64 uid          = 2;
+    bytes user_info     = 3;
+}

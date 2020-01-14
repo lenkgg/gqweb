@@ -1,0 +1,82 @@
+syntax = "proto3";
+package proto;
+
+service Market{
+    rpc NotifyAction(NotifyActionRequest) returns (NotifyActionResponse){}
+    rpc PaySlot(PaySlotRequest) returns(PaySlotResponse){}
+    rpc ListUsrShare(ListUsrShareRequest) returns(ListUsrShareResponse){}
+    rpc ListOrgShare(ListOrgShareRequest) returns(ListOrgShareResponse){}
+    rpc PayOrg(PayOrgRequest) returns(PayOrgResponse){}
+    rpc PreBill(PreBillRequest) returns(PreBillResponse){}
+}
+
+message NotifyActionRequest{
+    uint64 uid              =2;
+    uint64 uin              =3;
+    string act              =4;
+}
+
+message NotifyActionResponse{
+    string msg              =2;
+}
+
+message PaySlotRequest{
+    uint64 uid              =2;
+    uint32 sid              =3;
+    int32 months            =4;
+}
+
+message PaySlotResponse{
+    bytes myslots           =3;
+}
+
+message ListUsrShareRequest{
+    uint64 uid              =2;
+    string start            =3;
+    string end              =4;
+}
+
+message ListUsrShareResponse{
+    bytes shares            =3;
+}
+
+message ListOrgShareRequest{
+    uint64 oid              =2;
+    string start            =3;
+    string end              =4;
+}
+
+message ListOrgShareResponse{
+    bytes shares            =3;
+}
+
+message PayOrgRequest{
+    uint64 op               =2;    ///运维操作人id
+    uint64 checker          =3;    ///审核人id
+    uint64 oid              =4;    ///待支付机构id
+    bytes paylist          =5;
+}
+
+message PayOrgResponse{
+    uint64 op               =2;
+    uint64 checker          =3;
+    uint64 oid              =4;
+    string billno           =5;   ///成功时不为空
+}
+
+///用户预定纪录,供客服跟踪，无需返回
+message PreBillRequest{
+    uint64 uid          =2;
+    uint32 months       =3;
+    uint32 slots        =4;
+    string phone        =5;
+    string pre_time     =6;
+}
+
+message PreBillResponse{
+    uint64 uid          =2;
+    uint32 months       =3;
+    uint32 slots        =4;
+    string phone        =5;
+    string pre_time     =6;
+}

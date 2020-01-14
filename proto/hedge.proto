@@ -1,0 +1,165 @@
+syntax = "proto3";
+package proto;
+
+service Hedge{
+  rpc Hedge(HedgeRequest) returns (HedgeResponse){}
+  rpc Predict(PredictRequest) returns (PredictResponse){}
+  rpc TimerPredict(TimerPredictRequest) returns (TimerPredictResponse){}
+  rpc TimerHedge(TimerHedgeRequest) returns (TimerHedgeResponse){}
+  rpc SetMysymbol(SetMysymbolRequest) returns (SetMysymbolResponse){}
+  rpc OpenMyslot(OpenMyslotRequest) returns (OpenMyslotResponse){}
+  rpc GetMyslot(GetMyslotRequest) returns (GetMyslotResponse){}
+  rpc SetMyslot(SetMyslotRequest) returns (SetMyslotResponse){}
+  rpc InitSlots(InitSlotsRequest) returns (InitSlotsResponse){}
+  rpc RenewSlot(RenewSlotRequest) returns (RenewSlotResponse){}
+  rpc Reward(RewardRequest) returns (RewardResponse){}
+  /////for non-slot version///
+  rpc GetAllStocks(GetAllStocksRequest) returns (GetAllStocksResponse){}
+  rpc AddStock(AddStockRequest) returns (AddStockResponse){}
+  rpc DelStock(DelStockRequest) returns (DelStockResponse){}
+}
+
+message SetMysymbolRequest{
+    uint64 uid                  =2;
+    uint32 slot_id              =3;
+    string symbol               =4;
+
+}
+
+message SetMysymbolResponse{
+    bytes slot                  =3;
+}
+
+message OpenMyslotRequest{
+    uint64 uid                 =2;
+    int32 months               =3;
+    int32 days                 =4;
+
+}
+
+message OpenMyslotResponse{
+    bytes myslots             =3;
+}
+
+message GetMyslotRequest{
+    uint64 uid                  =2;
+}
+
+message GetMyslotResponse{
+    bytes myslots               =3;
+}
+
+message SetMyslotRequest{
+    uint64 uid                  =3;
+    uint32 sid                  =4;
+    string name                 =5;
+    string desc                 =6;
+}
+
+message SetMyslotResponse{
+    uint64 uid                  =3;
+    bytes slot                  =4;
+}
+
+message HedgeRequest{
+    string bsymbol              = 2;            ///base fobj code,
+    string ktype                = 3;
+    string scope                = 4;               ///统计范围，typedef里 const scope
+}
+
+message HedgeResponse{
+    uint64 dtime            = 3;
+    string ktype            = 4;
+    string bsymbol          = 5;
+    string scope            = 6;               ///统计范围，typedef里 const scope
+    bytes js_result         = 7;
+
+}
+
+message PredictRequest{
+    repeated string symbols          = 2;
+    string ktype                     = 3;
+}
+
+message PredictResponse{
+    bytes   js_kline   = 4;
+}
+
+message TimerPredictRequest{
+    string ktype           = 3;
+}
+
+message TimerPredictResponse{
+    bytes  js_klines          = 4;
+}
+
+message TimerHedgeRequest{
+    string ktype           = 3;
+
+}
+
+message TimerHedgeResponse{
+    bytes  js_result        = 6;
+}
+
+message InitSlotsRequest{
+    uint64 uid          =2;
+}
+
+message InitSlotsResponse{
+    bytes myslots         =2;
+}
+
+message RenewSlotRequest{
+    uint64 uid          =2;
+    uint32 slot_id      =3;
+    int32 months          =4;
+    int32 days            =5;
+}
+
+message RenewSlotResponse{
+    bytes myslots             =3;
+}
+
+
+//////奖励某uin插槽时间
+message RewardRequest{
+    uint64 uin            =2;
+    int32 months          =4;
+    int32 days            =5;
+}
+
+message RewardResponse{
+    uint64 uin                =2;
+    bytes myslots             =3;
+}
+
+/////////for non-slot version////
+message GetAllStocksRequest{
+    uint64 uid              =2;
+}
+
+message GetAllStocksResponse{
+    uint64 uid              =2;
+    repeated string stocks  =3;
+}
+
+message AddStockRequest{
+    uint64 uid              =2;
+    string stock            =3;
+}
+
+message AddStockResponse{
+    uint64 uid              =2;
+    repeated string stocks  =3;
+}
+
+message DelStockRequest{
+    uint64 uid              =2;
+    string stock            =3;
+}
+
+message DelStockResponse{
+    uint64 uid              =2;
+    repeated string stocks  =3;
+}

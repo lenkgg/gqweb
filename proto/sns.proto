@@ -1,0 +1,237 @@
+syntax = "proto3";
+package proto;
+
+service Sns{
+    rpc CreateGroup(CreateGroupRequest) returns (CreateGroupResponse){}
+    rpc GetGroups(GetGroupsRequest) returns (GetGroupResponse){}
+    rpc ApplyGroup(ApplyGroupRequest) returns (ApplyGroupResponse){}
+    rpc QuitGroup(QuitGroupRequest) returns(QuitGroupResponse) {}
+
+    //////for manage//////////
+    rpc SetGroup(SetGroupRequest) returns(SetGroupResponse){}
+    rpc SetManager(SetManagerRequest) returns(SetManagerResponse){}
+    rpc ListApply(ListApplyRequest) returns(ListApplyResponse){}
+    rpc AcceptMember(AcceptMemberRequest) returns(AcceptMemberResponse){}
+
+    ///////for topic///////
+    rpc CreateTopic(CreateTopicRequest) returns(CreateTopicResponse){}
+    rpc SetTopic(SetTopicRequest) returns(SetTopicResponse){}
+
+    ////for post/////////
+    rpc PubPost(PubPostRequest) returns(PubPostResponse){}
+    rpc ListPost(ListPostRequest) returns(ListPostResponse){}
+    rpc GroupsPost(GroupsPostRequest) returns(GroupsPostResponse){}
+    rpc LikePost(LikePostRequest) returns(LikePostResponse){}
+    rpc DeletePost(DeletePostRequest) returns(DeletePostResponse){}
+
+    //////for reply///////
+    rpc ReplyPost(ReplyPostRequest) returns(ReplyPostResponse){}
+    rpc DeleteReply(DeleteReplyRequest) returns(DeleteReplyResponse){}
+}
+
+
+//////////for group////////////
+message CreateGroupRequest{
+    uint64 uid              =3;
+    string name             =4;
+    int32 permission        =5;
+}
+
+message CreateGroupResponse{
+    bytes jsgroup           =4;     ///单个群组数据 Group{}
+}
+
+message GetGroupsRequest{
+    uint64 uid              =3;
+}
+
+message GetGroupResponse{
+    bytes jsgroups      =4;    ///所有群组数据  []Group{}
+}
+
+message ApplyGroupRequest{
+    uint64 uid          =3;
+    uint64 gid          =4;
+}
+message ApplyGroupResponse{
+    uint64 gid          =4;
+    int32 applyed       =5;  ///1:success
+}
+
+message QuitGroupRequest{
+    uint64 uid          =3;
+    uint64 gid          =4;
+}
+message QuitGroupResponse{
+     uint64 gid          =4;
+     int32 quit          =5;  ////1:success
+}
+
+///////////group manage//////
+message SetGroupRequest{
+    uint64 uid          =2;
+    uint64 gid          =3;
+    string name         =4;
+    string desc         =5;
+    int32  permission   =6;   ////0:refuse all 1:apply; 2:free
+    int32  status       =7;  ///0:close; 1:open
+    string image        =8;
+}
+
+message SetGroupResponse{
+    uint64 gid          =3;
+    bytes jsgroup       =4;     ///单个群组数据 Group{}
+}
+
+message SetManagerRequest{
+    uint64 uid          =3;
+    uint64 gid          =4;
+    uint64 uin          =5;
+    int32  operate      =6;    ///0:撤销，1:设置
+}
+
+message SetManagerResponse{
+    uint64 gid          =4;
+    repeated uint64 managers  =5;
+}
+
+message ListApplyRequest{
+    uint64 uid          =3;
+    uint64 gid          =4;
+}
+
+message ListApplyResponse{
+    uint64 gid          =4;
+    repeated uint64 Applicant  =5;
+}
+
+message AcceptMemberRequest{
+    uint64 uid          =3;
+    uint64 gid          =4;
+    uint64 uin          =5;
+    int32  accept       =6;  ///0:refuse; 1:accept
+}
+
+message AcceptMemberResponse{
+    uint64 gid          =4;
+    repeated uint64 members  =5;
+}
+//////////group end//////////////
+
+////////// for topic manage////////////
+message CreateTopicRequest{
+    uint64 uid          =3;
+    uint64 gid          =4;
+    string name         =5;
+    string desc         =6;
+}
+
+message CreateTopicResponse{
+    bytes jstopics      =5;  //gid下所有topics数据
+}
+
+message SetTopicRequest{
+    uint64 uid          =2;
+    uint64 gid          =3;
+    string name         =4;  //话题名字，唯一表示符
+    string symbol       =5;  //话题关联的股票，可选
+    string desc         =6;
+    int32 status        =7;   ///0:close; 1:open
+    string image        =8;
+}
+
+message SetTopicResponse{
+    uint64 gid         =4;
+    bytes jstopics     =5;  //gid下所有topics数据
+}
+
+////////topic end//////////////
+
+
+////////for post///////////////
+message PubPostRequest{
+    uint64 uid          =1;
+    uint64 gid          =2;
+    string topic        =3;
+    uint64 pid          =4;  ////empty:create new one;  not empty:modify
+    string title        =5;
+    string text         =6;
+    repeated string attacher  =7;
+    string nick         =8;
+    string avatar       =9;
+}
+
+message PubPostResponse{
+    bytes jspost        =3;   // Post{}
+}
+
+////for group post /////
+message ListPostRequest{
+    uint64 uid          =3;
+    uint64 gid          =4;   ///指定群组id
+    int32  dir          =5;   ///0:最新一页，-1：前翻，拉取lastpid之前的一页
+    uint64 lastpid      =6;   ///0:拉最新的一页，非0：lastpid+dir决定拉取的posts
+    string filter       =7;
+}
+
+message ListPostResponse{
+    bytes jspost       =6;    ///PostRsp{}
+}
+
+////default ：dir = 0
+message GroupsPostRequest{
+    uint64 uid          =3;
+    repeated uint64 gids     =4;
+}
+
+message GroupsPostResponse{
+    bytes jsposts       =6;    ///[]PostRsp{}
+}
+
+message LikePostRequest{
+    uint64 uid          =3;
+    uint64 pid          =6;
+}
+message LikePostResponse{
+    uint64 pid          =6;
+    int32 count         =7;
+}
+
+message DeletePostRequest{
+    uint64 uid          =3;
+    uint64 pid          =6;
+}
+
+message DeletePostResponse{
+    uint64 pid          =6;
+    int32  deleted       =7;    ///1:success
+}
+
+/////////////////reply topic/////////
+message ReplyPostRequest{
+    uint64 uid          =3;
+    uint64 pid          =6;
+    uint64 rid          =7;     ///not empy when modify
+    string text         =8;
+    string mynick       =9;
+    string tonick       =10;
+    uint64 touin        =11;   ///回复对象，可选
+    repeated string attacher  =12;
+}
+
+message ReplyPostResponse{
+    uint64 pid          =6;
+    bytes jsreply      =7;   ///post id下全部回复的列表
+}
+
+message DeleteReplyRequest{
+    uint64 uid          =3;
+    uint64 pid          =6;
+    uint64 rid          =7;
+}
+
+message DeleteReplyResponse{
+    uint64 pid          =6;
+    uint64 rid          =7;
+    int32  deleted       =8;    ///1:success
+}

@@ -1,0 +1,9 @@
+{
+    "aisvr": "127.0.0.1:9888",
+    "predict": "../data/predict/",
+    "hedge": "../data/hedge/",
+    "tm_path": "../data/default/",
+    "default_cn_index": "cn_index.json",
+    "default_cn_hedge": "cn_hedge.json",
+    "scope": "../data/scope"
+}
